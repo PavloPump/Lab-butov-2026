@@ -1,0 +1,289 @@
+# Система управления доставкой грузов
+
+Веб-приложение для управления процессом доставки грузов с функционалом для клиентов и водителей.
+
+## Описание проекта
+
+Система управления доставкой грузов предназначена для автоматизации процессов логистики, позволяя клиентам создавать заказы на доставку, а водителям - управлять процессом доставки. Приложение обеспечивает прозрачность отслеживания грузов и эффективное взаимодействие между участниками процесса доставки.
+
+**Основные возможности:**
+- Регистрация и авторизация пользователей (клиенты, водители, администраторы)
+- Создание заказов на доставку грузов
+- Назначение водителей на заказы
+- Отслеживание статуса доставки в реальном времени
+- Управление доставками для водителей
+- Панель администратора для управления системой
+
+## Используемый стек технологий
+
+### Backend
+- **Язык программирования:** TypeScript
+- **Платформа:** Node.js
+- **Фреймворк:** Express.js
+- **ORM:** Prisma
+- **База данных:** PostgreSQL
+- **Аутентификация:** JWT (jsonwebtoken)
+- **Хеширование паролей:** bcryptjs
+- **Валидация:** express-validator
+- **Безопасность:** Helmet, CORS
+
+### Frontend
+- **Язык программирования:** TypeScript
+- **Фреймворк:** React 18
+- **Сборщик:** Vite
+- **Маршрутизация:** React Router DOM
+- **HTTP клиент:** Axios
+- **Стилизация:** TailwindCSS
+- **Иконки:** Lucide React
+
+### Инструменты разработки
+- **Система контроля версий:** Git
+- **Менеджер пакетов:** npm (с поддержкой workspaces)
+- **Типизация:** TypeScript
+- **Среды:** Node.js 18+, npm 9+
+
+## Архитектура приложения
+
+### Архитектурный подход
+Проект реализован с использованием **Clean Architecture (Layered Architecture)**, которая обеспечивает разделение ответственности и независимость слоёв.
+
+### Логическое разбиение на слои
+
+#### 1. Presentation Layer (Слой представления)
+- **Ответственность:** Обработка HTTP запросов, маршрутизация, middleware
+- **Компоненты:**
+  - Express маршруты (routes)
+  - Middleware для обработки ошибок и валидации
+  - Контроллеры (в будущем)
+
+#### 2. Application Layer (Слой приложения)
+- **Ответственность:** Бизнес-логика, use cases, оркестрация работы между слоями
+- **Компоненты:**
+  - Сервисы (UserService, OrderService, DeliveryService)
+  - DTO (Data Transfer Objects)
+
+#### 3. Domain Layer (Слой домена)
+- **Ответственность:** Сущности и бизнес-правила, независим от инфраструктуры
+- **Компоненты:**
+  - Сущности (User, Order, Delivery)
+  - Интерфейсы репозиториев
+
+#### 4. Infrastructure Layer (Слой инфраструктуры)
+- **Ответственность:** Работа с внешними системами, база данных
+- **Компоненты:**
+  - Реализации репозиториев (Prisma)
+  - Конфигурация базы данных
+
+### Схема взаимодействия компонентов
+
+```
+Client (Browser)
+    ↓ HTTP/REST
+Presentation Layer (Express Routes)
+    ↓
+Application Layer (Services)
+    ↓
+Domain Layer (Entities)
+    ↓
+Repository Interfaces
+    ↓
+Infrastructure Layer (Prisma + PostgreSQL)
+```
+
+## Структура каталогов
+
+```
+delivery-management-system/
+├── backend/                    # Серверная часть
+│   ├── src/
+│   │   ├── presentation/       # Слой представления
+│   │   │   ├── routes/         # Express маршруты
+│   │   │   └── middleware/     # Middleware
+│   │   ├── application/        # Слой приложения
+│   │   │   ├── services/       # Бизнес-логика
+│   │   │   └── dto/            # Data Transfer Objects
+│   │   ├── domain/             # Слой домена
+│   │   │   ├── entities/       # Сущности
+│   │   │   └── repositories/   # Интерфейсы репозиториев
+│   │   ├── infrastructure/     # Слой инфраструктуры
+│   │   │   ├── repositories/   # Реализации репозиториев
+│   │   │   └── database/       # Конфигурация БД
+│   │   └── index.ts           # Точка входа
+│   ├── prisma/
+│   │   └── schema.prisma      # Схема базы данных
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend/                   # Клиентская часть
+│   ├── src/
+│   │   ├── components/        # React компоненты
+│   │   ├── pages/             # Страницы приложения
+│   │   ├── services/          # API сервисы
+│   │   ├── types/             # TypeScript типы
+│   │   ├── hooks/             # Custom hooks
+│   │   ├── utils/             # Утилиты
+│   │   ├── contexts/          # React Context
+│   │   ├── App.tsx            # Главный компонент
+│   │   ├── main.tsx           # Точка входа
+│   │   └── index.css          # Глобальные стили
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── tailwind.config.js
+│   └── tsconfig.json
+├── shared/                     # Общие модули
+│   ├── index.ts               # Общие типы
+│   └── package.json
+├── docs/                       # Документация
+├── .gitignore
+├── package.json               # Root package.json (workspaces)
+└── README.md
+```
+
+## Установка зависимостей
+
+### Требования
+- Node.js 18.0.0 или выше
+- npm 9.0.0 или выше
+- PostgreSQL 14 или выше
+
+### Шаги установки
+
+1. **Клонировать репозиторий**
+```bash
+git clone https://github.com/PavloPump/Lab-butov-2026.git
+cd Lab-butov-2026
+```
+
+2. **Установить зависимости**
+```bash
+npm install
+```
+
+3. **Настроить базу данных**
+- Создать базу данных PostgreSQL
+- Скопировать файл окружения:
+```bash
+cp backend/.env.example backend/.env
+```
+- Отредактировать `backend/.env` с вашими настройками:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/delivery_db?schema=public"
+PORT=3001
+NODE_ENV=development
+JWT_SECRET=your-secret-key-here
+JWT_EXPIRES_IN=7d
+CORS_ORIGIN=http://localhost:5173
+```
+
+4. **Выполнить миграции Prisma**
+```bash
+cd backend
+npm run prisma:generate
+npm run prisma:migrate
+```
+
+## Запуск проекта
+
+### Режим разработки
+
+**Запуск backend и frontend одновременно:**
+```bash
+npm run dev
+```
+
+**Запуск только backend:**
+```bash
+npm run dev:backend
+```
+
+**Запуск только frontend:**
+```bash
+npm run dev:frontend
+```
+
+После запуска:
+- Frontend будет доступен по адресу: http://localhost:5173
+- Backend API будет доступен по адресу: http://localhost:3001
+- Health check: http://localhost:3001/api/health
+
+### Режим производства
+
+**Сборка проекта:**
+```bash
+npm run build
+```
+
+**Запуск собранного backend:**
+```bash
+cd backend
+npm start
+```
+
+**Запуск собранного frontend:**
+```bash
+cd frontend
+npm run preview
+```
+
+## Сборка
+
+**Собрать весь проект:**
+```bash
+npm run build
+```
+
+**Собрать только backend:**
+```bash
+npm run build:backend
+```
+
+**Собрать только frontend:**
+```bash
+npm run build:frontend
+```
+
+## API Эндпоинты
+
+### Пользователи
+- `GET /api/users` - получить всех пользователей
+- `GET /api/users/:id` - получить пользователя по ID
+
+### Заказы
+- `GET /api/orders` - получить все заказы
+- `GET /api/orders/:id` - получить заказ по ID
+
+### Доставки
+- `GET /api/deliveries` - получить все доставки
+- `GET /api/deliveries/:id` - получить доставку по ID
+
+### Health Check
+- `GET /api/health` - проверка состояния API
+
+## Тестирование
+
+```bash
+npm test
+```
+
+## Дополнительные команды
+
+### Prisma
+```bash
+cd backend
+npm run prisma:studio    # Открыть Prisma Studio
+npm run prisma:generate  # Сгенерировать Prisma Client
+npm run prisma:migrate   # Выполнить миграции
+```
+
+### Линтинг
+```bash
+npm run lint
+```
+
+## Лицензия
+
+MIT
+
+## Контакты
+
+- Репозиторий: https://github.com/PavloPump/Lab-butov-2026

@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  DRIVER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  DELIVERED
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  SCHEDULED
+  PICKED_UP
+  IN_TRANSIT
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String
+  role      UserRole @default(CLIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ordersAsClient   Order[]  @relation("ClientOrders")
+  ordersAsDriver   Order[]  @relation("DriverOrders")
+  deliveries       Delivery[]
+
+  @@map("users")
+}
+
+model Order {
+  id                    String        @id @default(uuid())
+  clientId              String
+  driverId              String?
+  status                OrderStatus  @default(PENDING)
+  pickupAddress         String
+  deliveryAddress       String
+  cargoDescription      String
+  cargoWeight           Float
+  cargoDimensions       String
+  estimatedDeliveryTime DateTime?
+  actualDeliveryTime    DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  client    User      @relation("ClientOrders", fields: [clientId], references: [id])
+  driver    User?     @relation("DriverOrders", fields: [driverId], references: [id])
+  delivery  Delivery?
+
+  @@map("orders")
+}
+
+model Delivery {
+  id                String         @id @default(uuid())
+  orderId           String         @unique
+  driverId          String
+  status            DeliveryStatus @default(SCHEDULED)
+  currentLocation   String?
+  estimatedArrival  DateTime?
+  notes             String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  order  Order @relation(fields: [orderId], references: [id])
+  driver User @relation(fields: [driverId], references: [id])
+
+  @@map("deliveries")
+}
