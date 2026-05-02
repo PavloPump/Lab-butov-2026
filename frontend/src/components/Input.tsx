@@ -5,6 +5,7 @@ interface InputProps {
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean
+  name?: string
 }
 
 export default function Input({ 
@@ -13,7 +14,8 @@ export default function Input({
   placeholder, 
   value, 
   onChange,
-  required = false
+  required = false,
+  name
 }: InputProps) {
   return (
     <div className="mb-4">
@@ -26,6 +28,7 @@ export default function Input({
         value={value}
         onChange={onChange}
         required={required}
+        name={name}
         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
       />
     </div>
