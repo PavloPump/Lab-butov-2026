@@ -6,13 +6,24 @@
 
 Система управления доставкой грузов предназначена для автоматизации процессов логистики, позволяя клиентам создавать заказы на доставку, а водителям - управлять процессом доставки. Приложение обеспечивает прозрачность отслеживания грузов и эффективное взаимодействие между участниками процесса доставки.
 
+**Цели проекта:**
+- Автоматизация процессов логистики и доставки грузов
+- Обеспечение прозрачности отслеживания заказов
+- Упрощение взаимодействия между клиентами и водителями
+- Создание интуитивного пользовательского интерфейса
+
+**Задачи проекта:**
+- Разработка пользовательского интерфейса для клиентов и водителей
+- Реализация системы авторизации и регистрации
+- Создание функционала для управления заказами и доставками
+- Обеспечение стабильной работы приложения
+
 **Основные возможности:**
-- Регистрация и авторизация пользователей (клиенты, водители, администраторы)
+- Регистрация и авторизация пользователей (клиенты, водители)
 - Создание заказов на доставку грузов
 - Назначение водителей на заказы
 - Отслеживание статуса доставки в реальном времени
 - Управление доставками для водителей
-- Панель администратора для управления системой
 
 ## Интерактивный макет интерфейса
 
@@ -102,27 +113,18 @@
 
 ## Используемый стек технологий
 
-### Backend
-- **Язык программирования:** TypeScript
-- **Платформа:** Node.js
-- **Фреймворк:** Express.js
-- **ORM:** Prisma
-- **База данных:** PostgreSQL
-- **Аутентификация:** JWT (jsonwebtoken)
-- **Хеширование паролей:** bcryptjs
-- **Валидация:** express-validator
-- **Безопасность:** Helmet, CORS
-
 ### Frontend
 - **Язык программирования:** TypeScript
 - **Фреймворк:** React 18
 - **Сборщик:** Vite
 - **Маршрутизация:** React Router DOM
 - **Стилизация:** TailwindCSS
+- **Управление состоянием:** React Context API
+- **Хуки:** Custom React Hooks
 
 ### Инструменты разработки
 - **Система контроля версий:** Git
-- **Менеджер пакетов:** npm (с поддержкой workspaces)
+- **Менеджер пакетов:** npm
 - **Типизация:** TypeScript
 - **Среды:** Node.js 18+, npm 9+
 
@@ -134,78 +136,65 @@
 ### Логическое разбиение на слои
 
 #### 1. Presentation Layer (Слой представления)
-- **Ответственность:** Обработка HTTP запросов, маршрутизация, middleware
+- **Ответственность:** Отображение UI, обработка пользовательских действий
 - **Компоненты:**
-  - Express маршруты (routes)
-  - Middleware для обработки ошибок и валидации
-  - Контроллеры (в будущем)
+  - React компоненты (components)
+  - Страницы приложения (pages)
+  - Маршрутизация (React Router)
 
-#### 2. Application Layer (Слой приложения)
-- **Ответственность:** Бизнес-логика, use cases, оркестрация работы между слоями
+#### 2. Business Logic Layer (Слой бизнес-логики)
+- **Ответственность:** Бизнес-логика, управление состоянием
 - **Компоненты:**
-  - Сервисы (UserService, OrderService, DeliveryService)
-  - DTO (Data Transfer Objects)
+  - Custom hooks (useAuth, useOrders, useDriver)
+  - React Context (AuthContext)
 
-#### 3. Domain Layer (Слой домена)
-- **Ответственность:** Сущности и бизнес-правила, независим от инфраструктуры
+#### 3. Data Layer (Слой данных)
+- **Ответственность:** Работа с данными, API запросы
 - **Компоненты:**
-  - Сущности (User, Order, Delivery)
-  - Интерфейсы репозиториев
-
-#### 4. Infrastructure Layer (Слой инфраструктуры)
-- **Ответственность:** Работа с внешними системами, база данных
-- **Компоненты:**
-  - Реализации репозиториев (Prisma)
-  - Конфигурация базы данных
+  - DataService (mock данные)
+  - Mock данные (пользователи, заказы, доставки)
 
 ### Схема взаимодействия компонентов
 
 ```
-Client (Browser)
-    ↓ HTTP/REST
-Presentation Layer (Express Routes)
+User Interface (React Components)
     ↓
-Application Layer (Services)
+Business Logic (Custom Hooks)
     ↓
-Domain Layer (Entities)
+Data Layer (DataService)
     ↓
-Repository Interfaces
-    ↓
-Infrastructure Layer (Prisma + PostgreSQL)
+Mock Data (In-memory)
 ```
 
 ## Структура каталогов
 
 ```
 delivery-management-system/
-├── backend/                    # Серверная часть
-│   ├── src/
-│   │   ├── presentation/       # Слой представления
-│   │   │   ├── routes/         # Express маршруты
-│   │   │   └── middleware/     # Middleware
-│   │   ├── application/        # Слой приложения
-│   │   │   ├── services/       # Бизнес-логика
-│   │   │   └── dto/            # Data Transfer Objects
-│   │   ├── domain/             # Слой домена
-│   │   │   ├── entities/       # Сущности
-│   │   │   └── repositories/   # Интерфейсы репозиториев
-│   │   ├── infrastructure/     # Слой инфраструктуры
-│   │   │   ├── repositories/   # Реализации репозиториев
-│   │   │   └── database/       # Конфигурация БД
-│   │   └── index.ts           # Точка входа
-│   ├── prisma/
-│   │   └── schema.prisma      # Схема базы данных
-│   ├── package.json
-│   └── tsconfig.json
 ├── frontend/                   # Клиентская часть
 │   ├── src/
 │   │   ├── components/        # React компоненты
-│   │   ├── pages/             # Страницы приложения
-│   │   ├── services/          # API сервисы
-│   │   ├── types/             # TypeScript типы
-│   │   ├── hooks/             # Custom hooks
-│   │   ├── utils/             # Утилиты
+│   │   │   ├── Alert.tsx      # Компонент для сообщений
+│   │   │   ├── Button.tsx     # Компонент кнопки
+│   │   │   ├── EmptyState.tsx # Компонент пустого состояния
+│   │   │   ├── Input.tsx      # Компонент поля ввода
+│   │   │   ├── Layout.tsx     # Компонент обёртки
+│   │   │   └── LoadingSpinner.tsx # Компонент загрузки
 │   │   ├── contexts/          # React Context
+│   │   │   └── AuthContext.tsx
+│   │   ├── hooks/             # Custom hooks
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useDriver.ts
+│   │   │   └── useOrders.ts
+│   │   ├── pages/             # Страницы приложения
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   ├── ClientDashboard.tsx
+│   │   │   └── DriverDashboard.tsx
+│   │   ├── services/          # API сервисы
+│   │   │   ├── api.ts
+│   │   │   ├── dataService.ts
+│   │   │   └── mockData.ts
 │   │   ├── App.tsx            # Главный компонент
 │   │   ├── main.tsx           # Точка входа
 │   │   └── index.css          # Глобальные стили
@@ -214,21 +203,21 @@ delivery-management-system/
 │   ├── vite.config.ts
 │   ├── tailwind.config.js
 │   └── tsconfig.json
-├── shared/                     # Общие модули
-│   ├── index.ts               # Общие типы
-│   └── package.json
 ├── docs/                       # Документация
+│   ├── prototype/             # Интерактивный макет
+│   │   └── index.html
+│   ├── отчет_лабораторная_работа_3.md
+│   ├── отчет_лабораторная_работа_4.md
+│   └── отчет_лабораторная_работа_5.md
 ├── .gitignore
-├── package.json               # Root package.json (workspaces)
 └── README.md
 ```
 
-## Установка зависимостей
+## Установка и запуск
 
 ### Требования
 - Node.js 18.0.0 или выше
 - npm 9.0.0 или выше
-- PostgreSQL 14 или выше
 
 ### Шаги установки
 
@@ -240,128 +229,30 @@ cd Lab-butov-2026
 
 2. **Установить зависимости**
 ```bash
+cd frontend
 npm install
 ```
 
-3. **Настроить базу данных**
-- Создать базу данных PostgreSQL
-- Скопировать файл окружения:
+### Запуск проекта
+
+**Режим разработки:**
 ```bash
-cp backend/.env.example backend/.env
-```
-- Отредактировать `backend/.env` с вашими настройками:
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/delivery_db?schema=public"
-PORT=3001
-NODE_ENV=development
-JWT_SECRET=your-secret-key-here
-JWT_EXPIRES_IN=7d
-CORS_ORIGIN=http://localhost:5173
-```
-
-4. **Выполнить миграции Prisma**
-```bash
-cd backend
-npm run prisma:generate
-npm run prisma:migrate
-```
-
-## Запуск проекта
-
-### Режим разработки
-
-**Запуск backend и frontend одновременно:**
-```bash
+cd frontend
 npm run dev
 ```
 
-**Запуск только backend:**
+После запуска приложение будет доступно по адресу: http://localhost:5173
+
+**Сборка для продакшена:**
 ```bash
-npm run dev:backend
-```
-
-**Запуск только frontend:**
-```bash
-npm run dev:frontend
-```
-
-После запуска:
-- Frontend будет доступен по адресу: http://localhost:5173
-- Backend API будет доступен по адресу: http://localhost:3001
-- Health check: http://localhost:3001/api/health
-
-### Режим производства
-
-**Сборка проекта:**
-```bash
+cd frontend
 npm run build
 ```
 
-**Запуск собранного backend:**
-```bash
-cd backend
-npm start
-```
-
-**Запуск собранного frontend:**
+**Просмотр собранной версии:**
 ```bash
 cd frontend
 npm run preview
-```
-
-## Сборка
-
-**Собрать весь проект:**
-```bash
-npm run build
-```
-
-**Собрать только backend:**
-```bash
-npm run build:backend
-```
-
-**Собрать только frontend:**
-```bash
-npm run build:frontend
-```
-
-## API Эндпоинты
-
-### Пользователи
-- `GET /api/users` - получить всех пользователей
-- `GET /api/users/:id` - получить пользователя по ID
-
-### Заказы
-- `GET /api/orders` - получить все заказы
-- `GET /api/orders/:id` - получить заказ по ID
-
-### Доставки
-- `GET /api/deliveries` - получить все доставки
-- `GET /api/deliveries/:id` - получить доставку по ID
-
-### Health Check
-- `GET /api/health` - проверка состояния API
-
-## Тестирование
-
-```bash
-npm test
-```
-
-## Дополнительные команды
-
-### Prisma
-```bash
-cd backend
-npm run prisma:studio    # Открыть Prisma Studio
-npm run prisma:generate  # Сгенерировать Prisma Client
-npm run prisma:migrate   # Выполнить миграции
-```
-
-### Линтинг
-```bash
-npm run lint
 ```
 
 ## Лицензия
