@@ -2,6 +2,8 @@ import { useState } from 'react'
 import Layout from '../components/Layout'
 import Input from '../components/Input'
 import Button from '../components/Button'
+import EmptyState from '../components/EmptyState'
+import LoadingSpinner from '../components/LoadingSpinner'
 import { useAuthContext } from '../contexts/AuthContext'
 import { useOrders } from '../hooks/useOrders'
 import { Order } from '../services/mockData'
@@ -144,9 +146,17 @@ function ClientDashboard() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">📦 Мои заказы</h3>
             {isLoading ? (
-              <p className="text-gray-600">Загрузка заказов...</p>
+              <LoadingSpinner text="Загрузка заказов..." />
             ) : orders.length === 0 ? (
-              <p className="text-gray-600">У вас пока нет заказов</p>
+              <EmptyState
+                icon="📦"
+                title="Нет заказов"
+                description="У вас пока нет заказов. Создайте первый заказ, чтобы начать пользоваться системой."
+                action={{
+                  label: "Создать заказ",
+                  onClick: () => setShowCreateForm(true)
+                }}
+              />
             ) : (
               <div className="space-y-3">
                 {orders.map((order) => (

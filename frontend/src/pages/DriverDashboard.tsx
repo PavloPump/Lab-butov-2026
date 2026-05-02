@@ -1,5 +1,7 @@
 import Layout from '../components/Layout'
 import Button from '../components/Button'
+import EmptyState from '../components/EmptyState'
+import LoadingSpinner from '../components/LoadingSpinner'
 import { useAuthContext } from '../contexts/AuthContext'
 import { useDriver } from '../hooks/useDriver'
 import { Delivery } from '../services/mockData'
@@ -52,9 +54,13 @@ function DriverDashboard() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">📋 Доступные заказы</h3>
             {isLoading ? (
-              <p className="text-gray-600">Загрузка заказов...</p>
+              <LoadingSpinner text="Загрузка заказов..." />
             ) : availableOrders.length === 0 ? (
-              <p className="text-gray-600">Нет доступных заказов</p>
+              <EmptyState
+                icon="📋"
+                title="Нет доступных заказов"
+                description="В данный момент нет доступных заказов. Проверьте позже."
+              />
             ) : (
               <div className="space-y-3">
                 {availableOrders.map((order) => (
@@ -77,9 +83,13 @@ function DriverDashboard() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">🚚 Текущие доставки</h3>
             {isLoading ? (
-              <p className="text-gray-600">Загрузка доставок...</p>
+              <LoadingSpinner text="Загрузка доставок..." />
             ) : myDeliveries.length === 0 ? (
-              <p className="text-gray-600">У вас пока нет доставок</p>
+              <EmptyState
+                icon="🚚"
+                title="Нет доставок"
+                description="У вас пока нет активных доставок. Примите заказ из списка доступных."
+              />
             ) : (
               <div className="space-y-3">
                 {myDeliveries.map((delivery) => (

@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Input from '../components/Input'
 import Button from '../components/Button'
+import Alert from '../components/Alert'
 import { useAuthContext } from '../contexts/AuthContext'
 
 function LoginPage() {
@@ -29,11 +30,7 @@ function LoginPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
           <h1 className="text-3xl font-bold text-center mb-8 text-indigo-600">Вход в систему</h1>
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
-            </div>
-          )}
+          {error && <Alert type="error" message={error} />}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
               label="Email"
